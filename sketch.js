@@ -1,4 +1,4 @@
-// < reference path="./p5.global-mode.d.ts" / >
+/// < reference path="./p5.global-mode.d.ts" / >
 
 let dice = [];
 let printString; 
@@ -6,15 +6,21 @@ let w = 100;
 let rolls= 0; 
 
 function setup() {
-  createCanvas(800,800); 
+  createCanvas(600,400); 
   background(0); 
   noLoop();
   button = createButton('Roll Dice');
+  button.style('font-size', '30px');
   button.position(19, 19);
   button.mousePressed(rollDice);
-  button = createButton('Reset');
-  button.position(500, 400);
-  button.mousePressed(reset);
+  button2 = createButton('Restart');
+  button2.style('font-size', '30px');
+  button2.position(450, 19);
+  button2.mousePressed(reset);
+}
+
+function keyPressed() {
+  rollDice(); 
 }
 
 function reset() {
@@ -22,7 +28,6 @@ function reset() {
   dice = []; 
   createDice(5); 
   rollDice(); 
-
 }
 
 function createDice(number) {
@@ -48,7 +53,7 @@ push();
 background(0);
 textSize(16);
 fill(255);
-text('Completed Rolls: ' + rolls, 19, 400);
+text('Completed Rolls: ' + rolls, 19, 300);
 pop(); 
 
 let index = 0; 
@@ -71,7 +76,6 @@ for (item of printString) {
 }
 
 function touchStarted() {
-
   mousePressed(); 
 }
 
