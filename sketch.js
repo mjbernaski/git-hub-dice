@@ -71,10 +71,11 @@ for (item of printString) {
 }
 
 function touchStarted() {
-  mouseClicked(); 
+
+  mousePressed(); 
 }
 
-function mouseClicked() {
+function mousePressed() {
   if ((mouseY >= 150) && (mouseY <=225)) {
     for (i=0; i <= printString.length; i++) {
       let tx1 = (w + ((i)*100))-30;
