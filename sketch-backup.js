@@ -45,7 +45,7 @@ function createDice(number) {
 function rollDice() {
 
   diceString = "  ";
-  if (rolls === 2) {
+  if (rolls === 2 {
     button.attribute('disabled', '')
   } 
   printString = [];
@@ -163,6 +163,11 @@ if ((counter["2"]==0) && (counter["3"]>=1) && (counter["4"]>=1) && (counter["5"]
   diceString = "Small Straight";
   return
 }
+
+
+
+
+
 
 }
 
