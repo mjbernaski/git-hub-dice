@@ -23,11 +23,12 @@ function setup() {
   console.log(buttSize); 
   button = createButton('Roll Dice');
   button.style('font-size', buttSize);
-  button.position(diceEdge/2, yOffset);
+  button.position(10, yOffset);
   button.mousePressed(rollDice);
   button2 = createButton(nextTurnLabel);
   button2.style('font-size', buttSize);
-  button2.position(width/2, yOffset);
+  let b2Offset = ((offset * 10) < 150) ? 100: (offset * 10);
+  button2.position(b2Offset, yOffset);
   button2.mousePressed(reset);
 }
 
@@ -62,7 +63,7 @@ function rollDice() {
 
   diceString = "  ";
 
-  if (rolls === 20) {
+  if (rolls === 2) {
     button.attribute('disabled', '');
   } 
 
@@ -80,11 +81,12 @@ checkDice();
 
 push(); 
 background(0);
-textSize(offset*3);
+textSize(offset*2);
 fill(255);
 text('Completed Rolls: ' + rolls, xOffset/2, height-(2* yOffset));
 fill(255,0,0); 
 stroke(255,0,0); 
+textSize(offset*4);
 text(diceString, width/2 ,height-(2* yOffset)); 
 pop(); 
 
@@ -193,12 +195,6 @@ if ((counter["2"]==0) && (counter["3"]>=1) && (counter["4"]>=1) && (counter["5"]
 function touchStarted() {
   mousePressed(); 
 }
-
-// index += diceEdge * 1.5; 
-//   if (dice[diCounter].held) {
-//     let tx1 = index + (4 * offset);
-//     ellipse(tx1, height/2+(4*offset), 10); 
-//   }
 
 function mousePressed() {
   let tx1, tx2; 
