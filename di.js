@@ -17,6 +17,12 @@ class Di {
 
     toggleHold() {
         this.held = !this.held; 
+        if (this.held) {
+            console.log('Toggled and now being held ', this.currentValue);
+        } else {
+            console.log('Toggled and not being held ', this.currentValue);
+        }
+    
     }
 
     reset() {

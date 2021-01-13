@@ -2,21 +2,32 @@
 
 let dice = [];
 let printString; 
-let w = 100; 
+let w; 
 let rolls= 0; 
 let diceString = "Good Luck!"; 
+let nextTurnLabel = "New Turn";
+let xOffset = 20; 
+let yOffset = 20; 
+let diceEdge; 
+let offset; 
+
 
 function setup() {
-  createCanvas(600,400); 
+  createCanvas(windowWidth,windowHeight); 
   background(0); 
   noLoop();
+  diceEdge = diceSize(); 
+  offset = diceEdge/10
+  w = diceEdge;
+  let buttSize = String(floor(diceEdge/5))+'px';
+  console.log(buttSize); 
   button = createButton('Roll Dice');
-  button.style('font-size', '30px');
-  button.position(19, 19);
+  button.style('font-size', buttSize);
+  button.position(diceEdge/2, yOffset);
   button.mousePressed(rollDice);
-  button2 = createButton('Restart');
-  button2.style('font-size', '30px');
-  button2.position(425, 19);
+  button2 = createButton(nextTurnLabel);
+  button2.style('font-size', buttSize);
+  button2.position(width/2, yOffset);
   button2.mousePressed(reset);
 }
 
@@ -33,7 +44,12 @@ function reset() {
   printString = [];
   createDice(5); 
   rollDice(); 
- 
+}
+
+function diceSize() {
+  // let smallerEdge = (width >= height) ? height : width;
+  let smallerEdge = width; 
+  return smallerEdge / 8; 
 }
 
 function createDice(number) {
@@ -45,11 +61,14 @@ function createDice(number) {
 function rollDice() {
 
   diceString = "  ";
-  if (rolls === 2) {
-    button.attribute('disabled', '')
+
+  if (rolls === 20) {
+    button.attribute('disabled', '');
   } 
+
   printString = [];
   rolls += 1; 
+
   for (di of dice) {
     if (!di.held) {
       let temp = di.roll(); 
@@ -61,30 +80,39 @@ checkDice();
 
 push(); 
 background(0);
-textSize(16);
+textSize(offset*3);
 fill(255);
-text('Completed Rolls: ' + rolls, 19, 300);
+text('Completed Rolls: ' + rolls, xOffset/2, height-(2* yOffset));
 fill(255,0,0); 
 stroke(255,0,0); 
-text(diceString, 400, 300); 
+text(diceString, width/2 ,height-(2* yOffset)); 
 pop(); 
-let index = 0; 
+
+let index = diceEdge; 
+
 let diCounter = 0; 
+
+let start = diceEdge/2; 
+
 for (item of printString) {
+
   stroke(255); 
   noFill(); 
-  textSize(32);
-  rect((w + index)-30, 150, 75, 75 ); 
+  textSize(diceEdge/3);
+  rectMode(CENTER); 
+  rect(index, height/2, diceEdge, diceEdge); 
   fill(255); 
-  text(item, w + index, 200);
-  index += 100;
+  text(item, index-offset, height/2+offset); 
+
+  console.log(offset); 
+
   if (dice[diCounter].held) {
-    let tx1 = (w + ((diCounter)*100))-30;
-    ellipse(tx1 + 9, 215, 10); 
+    let tx1 = index + (4 * offset);
+    ellipse(tx1, height/2+(4*offset), offset); 
   }
   diCounter+=1; 
+  index += diceEdge * 1.5; 
 } 
-
 }
 
 function checkDice() {
@@ -97,30 +125,26 @@ function checkDice() {
     "6": 0
   }
 
-
-
-  let binaryString = '';
-
   for (item of printString)
   {
     let which = str(item);
     counter[which] += 1
   }
 
- let keys = Object.keys(counter); 
+let keys = Object.keys(counter); 
 
- let aTwo = false; 
- let aThree = false; 
- let aFour = false; 
+let aTwo = false; 
+let aThree = false; 
+let aFour = false; 
 
- for (item of keys) {
+for (item of keys) {
 
-   if (counter[item] == 5) {
-     diceString = "Yahtzee"; 
+  if (counter[item] == 5) {
+    diceString = "Yahtzee"; 
     return
     }
-   if (counter[item] == 3) {
-     aThree = true; 
+  if (counter[item] == 3) {
+    aThree = true; 
     }
     if (counter[item] == 2) {
       aTwo = true; 
@@ -170,27 +194,39 @@ function touchStarted() {
   mousePressed(); 
 }
 
+// index += diceEdge * 1.5; 
+//   if (dice[diCounter].held) {
+//     let tx1 = index + (4 * offset);
+//     ellipse(tx1, height/2+(4*offset), 10); 
+//   }
+
 function mousePressed() {
-  if ((mouseY >= 150) && (mouseY <=225)) {
-    for (i=0; i <= printString.length; i++) {
-      let tx1 = (w + ((i)*100))-30;
-      let tx2 = (w + ((i)*100))+45; 
+  let tx1, tx2; 
+  if ((mouseY >= height/2-(diceEdge/2)) && (mouseY <=height/2+(diceEdge/2))) {
+    i = 0; 
+    tx1 = diceEdge/2; 
+    tx2 = tx1 + diceEdge;
+    while (i < printString.length) {
       if ((mouseX >= tx1) && (mouseX <= tx2)) {
         dice[i].toggleHold(); 
         if (dice[i].held) {
-          ellipse(tx1 + 9, 215, 10); 
+          ellipse(tx1+(9*offset), height/2+(4 * offset), offset); 
         } else {
           push();
           fill(0); 
-          ellipse(tx1 + 9, 215, 10); 
+          ellipse(tx1+(9*offset), height/2+(4 * offset), offset);
+          console.log(offset); 
           pop();
-
         }
-      }
+        break; 
+      } 
+        tx1 = tx1 + (1.5 * diceEdge);
+        tx2 = tx1 + diceEdge; 
+        i++; 
+    }
+      
     }
   } 
-
-}
 
 function draw() {
   createDice(5); 
